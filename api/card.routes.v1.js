@@ -16,7 +16,7 @@ routes.get('/cards', function (req, res) {
         })
         .catch((error) => {
         res.status(400).json(error);
-});
+    });
 });
 
 /* get single card by id ~/cards/$id */
@@ -28,7 +28,7 @@ routes.get('/cards/:id', function (req, res) {
         })
         .catch((error) => {
         res.status(400).json(error);
-});
+    });
 });
 
 // TODO: implement find in deck feature
@@ -41,7 +41,7 @@ routes.get('/cards/deck/:id', function (req, res) {
         })
         .catch((error) => {
         res.status(400).json(error);
-});
+    });
 });
 
 /* add card ~/cards */
@@ -57,7 +57,7 @@ routes.post('/cards', function (req, res) {
     });
     card.save()
         .then( () => res.status(200).json(card))
-.catch((error) => res.status(400).json(card));
+        .catch((error) => res.status(400).json(card));
 
 });
 

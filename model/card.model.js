@@ -8,7 +8,8 @@ const CardSchema = new Schema({
     },
     description: String,
     imagePath: String,
-    type: String
+    type: String,
+    event: String
 }, {
     timestamps: true
 });
@@ -17,12 +18,14 @@ const CardSchema = new Schema({
 const Card = mongoose.model('card', CardSchema);
 
 // Add a 'dummy' card (every time you require this file!)
-/*
+
 const card = new Card({
     name: 'target dummy',
     description: 'taunt',
-    imagePath:'http://media-hearth.cursecdn.com/avatars/149/57/12288.png'
+    imagePath:'http://media-hearth.cursecdn.com/avatars/149/57/12288.png',
+    type:'minion',
+    event:'taunt'
 }).save();
-*/
+
 
 module.exports = Card;
