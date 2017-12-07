@@ -10,6 +10,7 @@ const DeckSchema = new Schema({
     },
     description: String,
     made_by: String,
+    hero_type: String,
     cards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Card'}]
 }, {
     timestamps: true
@@ -19,12 +20,12 @@ const DeckSchema = new Schema({
 const Deck = mongoose.model('deck', DeckSchema);
 
 // Add a 'dummy' card (every time you require this file!)
-
+/*
 const card = new Card({
     name: 'target dummy',
     description: 'taunt',
     imagePath:'http://media-hearth.cursecdn.com/avatars/149/57/12288.png',
-    type:'minion',
+    type:'mech',
     event:'taunt'
 });
 
@@ -34,7 +35,8 @@ const deck = new Deck({
     name: 'target dummy deck',
     description: 'for testing purposes',
     made_by:'Daan',
+    hero_type: 'warrior',
     cards: cardarray
 }).save();
-
+*/
 module.exports = Deck;

@@ -31,7 +31,7 @@ routes.get('/decks/:id', function (req, res) {
 });
 });
 
-// TODO: implement find in deck feature
+// TODO: deprc. dit is exact hetzelfde as deck by id
 /* get decks in deck route ~/decks/deck/$id */
 routes.get('/decks/deck/:id', function (req, res) {
     res.contentType('application/json');
@@ -68,6 +68,7 @@ routes.put('/decks/:id', function (req, res) {
 
     const b= req.body;
 
+    console.log('deck-put req.body: '+req.body);
     const deck = new Deck({
         _id: b._id,
         name: b.name,

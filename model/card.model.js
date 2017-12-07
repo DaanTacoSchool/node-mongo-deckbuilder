@@ -18,14 +18,14 @@ const CardSchema = new Schema({
 const Card = mongoose.model('card', CardSchema);
 
 // Add a 'dummy' card (every time you require this file!)
-
+/*
 const card = new Card({
-    name: 'target dummy',
-    description: 'taunt',
-    imagePath:'http://media-hearth.cursecdn.com/avatars/149/57/12288.png',
-    type:'minion',
-    event:'taunt'
+    name: 'murloc raider',
+    description: '',
+    imagePath:'https://hearthstone.gamepedia.com/media/hearthstone.gamepedia.com/thumb/e/e4/Murloc_Raider%2855%29.png/200px-Murloc_Raider%2855%29.png?version=cb311cf2b33459579485bc689d22ce4d',
+    type:'murloc',
+    event:''
 }).save();
-
+*/
 
 module.exports = Card;
