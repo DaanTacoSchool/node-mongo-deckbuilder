@@ -6,6 +6,7 @@ var routes = express.Router();
 var mongodb = require('../config/mongo.db');
 var Deck = require('../model/deck.model');
 
+
 /* get all decks ~/decks */
 routes.get('/decks', function (req, res) {
     res.contentType('application/json');
@@ -28,7 +29,7 @@ routes.get('/decks/:id', function (req, res) {
         })
         .catch((error) => {
         res.status(400).json(error);
-});
+        });
 });
 
 // TODO: deprc. dit is exact hetzelfde as deck by id
@@ -48,19 +49,21 @@ routes.get('/decks/deck/:id', function (req, res) {
 routes.post('/decks', function (req, res) {
     const b = req.body;
 
+    console.log('add deck body: '+b.cards +' and '+ b.description);
     const deck = new Deck({
         name: b.name,
         description: b.description,
         made_by: b.made_by,
+        hero_type: b.hero_type,
         cards: b.cards
     });
-    Deck.save()
-        .then( () => res.status(200).json(deck))
-.catch((error) => res.status(400).json(deck));
+    deck.save()
+        .then( (deck) => res.status(200).json(deck))
+        .catch((error) => { console.log(error); res.status(400).json(deck); });
 
 });
 
-/* TODO: instead of deck in body, maybe card in body then add card to parent and save it; check next line.
+/* TODO: instead of deck in body, maybe card in body then add card to parent and save it; check nexxt line.
     https://stackoverflow.com/questions/15621970/pushing-object-into-array-schema-in-mongoose */
 
 /* edit Deck ~/decks/$id */
@@ -74,6 +77,7 @@ routes.put('/decks/:id', function (req, res) {
         name: b.name,
         description: b.description,
         made_by: b.made_by,
+        hero_type: b.hero_type,
         cards: b.cards
     });
 
@@ -87,10 +91,10 @@ routes.put('/decks/:id', function (req, res) {
 routes.delete('/decks/:id', function (req, res) {
 
     Deck.remove({"_id" :req.params.id})
-    /* Recipe.findByIdAndRemove(req.params._id)*/
         .then( res.status(200).json('OK'))
         .catch(res.status(400).json(error));
 });
+
 
 
 module.exports = routes;

@@ -20,11 +20,11 @@ const Card = mongoose.model('card', CardSchema);
 // Add a 'dummy' card (every time you require this file!)
 /*
 const card = new Card({
-    name: 'murloc raider',
-    description: '',
-    imagePath:'https://hearthstone.gamepedia.com/media/hearthstone.gamepedia.com/thumb/e/e4/Murloc_Raider%2855%29.png/200px-Murloc_Raider%2855%29.png?version=cb311cf2b33459579485bc689d22ce4d',
-    type:'murloc',
-    event:''
+    name: 'Fireguard Destroyer',
+    description: 'Battlecry: gain 1-4 attack. Overload (1)',
+    imagePath:'http://media-hearth.cursecdn.com/avatars/328/299/14455.png',
+    type:'Elemental',
+    event:'Battlecry, Overload'
 }).save();
 */
 

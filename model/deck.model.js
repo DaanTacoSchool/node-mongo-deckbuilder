@@ -29,7 +29,6 @@ const card = new Card({
     event:'taunt'
 });
 
-
 var cardarray= [card,card,card,card,card];
 const deck = new Deck({
     name: 'target dummy deck',
