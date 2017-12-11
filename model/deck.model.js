@@ -11,7 +11,8 @@ const DeckSchema = new Schema({
     description: String,
     made_by: String,
     hero_type: String,
-    cards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Card'}]
+    cards: [{type: mongoose.Schema.Types.ObjectId, ref: 'Card'}],
+    userId: Number
 }, {
     timestamps: true
 });
