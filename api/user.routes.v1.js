@@ -30,7 +30,7 @@ routes.get('/users/:id', function (req,res){
         .catch(function(error) {console.log(error);});
 });
 
-routes.get('/users/search/:search', function (req,res){
+routes.post('/users/search/:search', function (req,res){
     console.log('search');
     res.contentType('application/json');
 
