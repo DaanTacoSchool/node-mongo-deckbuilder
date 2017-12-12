@@ -26,8 +26,6 @@ routes.get('/users/:id', function (req,res){
     session.run("MATCH (n:User) WHERE n.id = '"+req.params.id +"' RETURN n LIMIT 1")
         .then(function(result){
             res.status(200).json(result.records);
-            // result.records.forEach(function (record)
-            // { console.log(record._fields[0]); });
         })
         .catch(function(error) {console.log(error);});
 });
@@ -35,11 +33,10 @@ routes.get('/users/:id', function (req,res){
 routes.get('/users/search/:search', function (req,res){
     console.log('search');
     res.contentType('application/json');
+
     session.run("MATCH (n:User) WHERE n.id = "+req.params.search +" OR n.name = '"+req.params.search+"' RETURN n")
         .then(function(result){
             res.status(200).json(result.records);
-            // result.records.forEach(function (record)
-            // { console.log(record._fields[0]); });
         })
         .catch(function(error) {console.log(error);});
 });
