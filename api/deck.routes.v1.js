@@ -53,15 +53,12 @@ routes.get('/decks/deck/:id', function (req, res) {
 /* add Deck ~/decks */
 routes.post('/decks', function (req, res) {
     const b = req.body;
-
     console.log('add deck body: '+b.cards +' and '+ b.description);
-
     session.run('CREATE (user:User {made_by: "'+b.made_by+'", name: "'+ b.made_by+'" }) RETURN user LIMIT 1').then(function (result){
         console.log('result: '+result.records);
         var deck;
         result.records.forEach(function(record){
             console.log(record._fields[0].properties.made_by);
-
             deck = new Deck({
                 name: b.name,
                 description: b.description,
@@ -79,8 +76,6 @@ routes.post('/decks', function (req, res) {
     }).catch(function (error) {
         console.log(error);
     })
-
-
 });
 
 /* TODO: instead of deck in body, maybe card in body then add card to parent and save it; check nexxt line.

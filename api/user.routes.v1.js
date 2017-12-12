@@ -31,15 +31,18 @@ routes.get('/users/:id', function (req,res){
         })
         .catch(function(error) {console.log(error);});
 });
-/*
-routes.post('users/new', function (req, res){
+
+routes.get('/users/search/:search', function (req,res){
+    console.log('search');
     res.contentType('application/json');
-    res.status(200).json
-    (console.log(
-        User.create(req.body.made_by)
-        )
-    );
-});*/
+    session.run("MATCH (n:User) WHERE n.id = "+req.params.search +" OR n.name = '"+req.params.search+"' RETURN n")
+        .then(function(result){
+            res.status(200).json(result.records);
+            // result.records.forEach(function (record)
+            // { console.log(record._fields[0]); });
+        })
+        .catch(function(error) {console.log(error);});
+});
 
 
 module.exports = routes;
