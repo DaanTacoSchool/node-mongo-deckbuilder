@@ -6,6 +6,7 @@ var routes = express.Router();
 var mongodb = require('../config/mongo.db');
 var Card = require('../model/card.model');
 var Deck = require('../model/deck.model');
+var debug = false;
 
 /* get all cards ~/cards */
 routes.get('/cards', function (req, res) {
@@ -40,9 +41,9 @@ routes.get('/cards/deck/:id', function (req, res) {
     // then use deck.cards to get all card ids and proceed to find the card with that id. add to resultset and return.
     Deck.findOne({ _id: req.params.id })
         .then((decks) => {
-            Card.find({ "_id": { "$in": decks.cards }}).then((cards)=> { res.status(200).json(cards); }).catch((error)=>{console.log(error);});
+            Card.find({ "_id": { "$in": decks.cards }}).then((cards)=> { res.status(200).json(cards); }).catch((error)=>{debug?console.log(error):false;});
          }).catch((error) => {
-        console.log(error);
+        debug?console.log(error):false;
             res.status(400).json(error);
         });
 

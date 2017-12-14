@@ -15,7 +15,38 @@ chai.use(chaiHttp);
 
 describe('POST METHODS', function() {
 
-    it('Creates a deck and returns created deck', function(done) {
+
+    it('create and save a deck',function (done) {
+        //_id:ObjectId("5a2d63ef25172c3dd0800002")
+        var card = new Card({_id:"5a2d63ef25172c3dd0800002",name:"testcardname", description:"testcarddescription",imagePath: "testinage",type:"testtype",event:"testevent"});
+        // ObjectId("5a2fdec4c12bac4380405980")
+        var deck = new Deck({name:"testname",description:"testdescription", made_by: "testmadeby", hero_type:"testherotype",cards:[card] });
+        deck.save()
+            .then(function(){
+            assert(!deck.isNew);
+        done();
+        });
+    });
+
+    it('return specific deck by deckname',function(done) {
+
+        //_id:ObjectId("5a2d63ef25172c3dd0800002")
+        var card = new Card({_id:"5a2d63ef25172c3dd0800002",name:"testcardname", description:"testcarddescription",imagePath: "testinage",type:"testtype",event:"testevent"});
+        // ObjectId("5a2fdec4c12bac4380405980")
+        var deck = new Deck({name:"testdeckname001xyz",description:"testdescription", made_by: "testmadeby", hero_type:"testherotype",cards:[card] });
+        deck.save()
+            .then(function(){
+                Deck.find({name: 'testdeckname001xyz'})
+                .then(function(decks) {
+                    assert(decks[0]._id.toString() === deck._id.toString());
+                    done();
+                });// no catch
+
+            });// no catch
+    });
+
+
+    it('API returns json', function(done) {
 
         //_id:ObjectId("5a2d63ef25172c3dd0800002")
         var card = new Card({_id:"5a2d63ef25172c3dd0800002",name:"testcardname", description:"testcarddescription",imagePath: "testinage",type:"testtype",event:"testevent"});
@@ -26,12 +57,7 @@ describe('POST METHODS', function() {
         chai.request(server).post('/decks')
             .send(deck)
             .end(function(err, res) {
-                // res.should.have.status(200);
-                res.should.be.json;
-                // res.body.should.be.an('object');
-                // res.body.should.have.property('name').that.is.a('string');
-                // expect(res.body.name).to.equal("testname");
-                assert(true);
+                res.should.be.json;//whether 200 or 400 etc. this should return json
                 done();
             });
     });

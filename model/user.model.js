@@ -18,7 +18,7 @@ var User = module.exports = function User(_node) {
 // Public constants:
 
 User.VALIDATION_INFO = {
-    'username': {
+    'name': {
         required: true,
         minLength: 2,
         maxLength: 16,
@@ -30,8 +30,8 @@ User.VALIDATION_INFO = {
 // Public instance properties:
 
 
-Object.defineProperty(User.prototype, 'username', {
-    get: function () { return this._node.properties['username']; }
+Object.defineProperty(User.prototype, 'name', {
+    get: function () { return this._node.properties['name']; }
 });
 
 // Creates the user and persists (saves) it to the db, incl. indexing it:

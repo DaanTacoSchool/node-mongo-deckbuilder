@@ -10,6 +10,7 @@ var neo4j = require('neo4j-driver').v1;
 var driver = neo4j.driver('bolt://hobby-fgnnmjnckhclgbkeioopeial.dbs.graphenedb.com:24786',neo4j.auth.basic("heroku-user","b.xRXKM5qHdFN7.MZiHqh0HQmrORtWI"));
 //var driver = neo4j.driver('bolt://localhost',neo4j.auth.basic("neo4j","neo4j"));
 var session = driver.session();
+var debug = false;
 
 
 /* get all decks ~/decks */
@@ -22,7 +23,7 @@ routes.get('/decks', function (req, res) {
         })
         .catch((error) => {
         res.status(400).json(error);
-});
+        });
 });
 
 /* get single Deck by id ~/decks/$id */
@@ -53,29 +54,64 @@ routes.get('/decks/deck/:id', function (req, res) {
 /* add Deck ~/decks */
 routes.post('/decks', function (req, res) {
     const b = req.body;
-    console.log('add deck body: '+b.cards +' and '+ b.description);
-    session.run('CREATE (user:User {made_by: "'+b.made_by+'", name: "'+ b.made_by+'" }) RETURN user LIMIT 1').then(function (result){
-        console.log('result: '+result.records);
-        var deck;
-        result.records.forEach(function(record){
-            console.log(record._fields[0].properties.made_by);
-            deck = new Deck({
-                name: b.name,
-                description: b.description,
-                made_by: record._fields[0].properties.made_by,
-                hero_type: b.hero_type,
-                cards: b.cards,
-                userId:record._fields[0].identity.low,
-            });
-        });
-        console.log('user: '+ result.records.toString());
-        deck.save()
-            .then( (deck) => res.status(200).json(deck))
-    .catch((error) => { console.log(error); res.status(400).json(deck); });
+    debug?console.log('add deck body: '+b.cards +' and '+ b.description):false;
+    var deck;
+    //Match(n:User) Where ID(n) = 1 Create (b:Deck {mongodb_id: ,name: 'test',made_by: n.made_by, description: 'test', hero_type: 'test', cards:['test','test'], userId: ID(n)})<-[rel:Made]-(n)
+   if(b.userId){
+       debug?console.log('new eck existing user'):false;
+     //  deck = new Deck(b);
+       deck = new Deck({
+           name: b.name,
+           description: b.description,
+           made_by: b.made_by,
+           hero_type: b.hero_type,
+           cards: b.cards,
+           userId: b.userId,
+       });
+       debug?console.log(deck):false;
 
-    }).catch(function (error) {
-        console.log(error);
-    })
+       deck.save()
+           .then(function(deck){
+               debug?console.log(deck._id):false;
+                var query = "Match(n:User) Where ID(n) = "+deck.userId+" Create (b:Deck {mongodb_id: '"+deck._id+"' ,name: '"+deck.name+"',made_by: '"+deck.made_by+"', description: '"+deck.description+"', hero_type: '"+deck.hero_type+"', cards: [''], userId: ID(n)})<-[rel:Made]-(n)";
+                session.run(query).then(function (result) {
+                    debug?console.log(result):false;
+                }).catch(function (error) {debug?console.log(error):false;});
+               res.status(200).json(deck);})
+           .catch(function(error){debug?console.log(error):false;res.status(400).json(deck); });
+      // deck = b;
+    /*   deck = new Deck({
+
+           name: b.name,
+           description: b.description,
+           made_by: b.made_by,
+           hero_type: b.hero_type,
+           cards: b.cards,
+           userId: b.userId
+       });*/
+
+   }else { // create new user along with deck
+       session.run('CREATE (user:User {made_by: "' + b.made_by + '", name: "' + b.made_by + '" }) RETURN user LIMIT 1').then(function (result) {
+           debug?console.log('result: ' + result.records):false;
+
+           result.records.forEach(function (record) {
+               debug?console.log(record._fields[0].properties.made_by):false;
+               deck = new Deck({
+                   name: b.name,
+                   description: b.description,
+                   made_by: record._fields[0].properties.made_by,
+                   hero_type: b.hero_type,
+                   cards: b.cards,
+                   userId: record._fields[0].identity.low,
+               });
+           });
+           debug?console.log('user: ' + result.records.toString()):false;
+           deck.save()
+               .then(function(deck){res.status(200).json(deck);}).catch(function(error){debug?console.log(error):false;res.status(400).json(deck); });
+       }).catch(function (error) {
+           debug?console.log(error):false;
+       });
+   }
 });
 
 /* TODO: instead of deck in body, maybe card in body then add card to parent and save it; check nexxt line.
@@ -86,7 +122,7 @@ routes.put('/decks/:id', function (req, res) {
 
     const b= req.body;
 
-    console.log('deck-put req.body: '+req.body);
+    debug?console.log('deck-put req.body: '+req.body):false;
     const deck = new Deck({
         _id: b._id,
         name: b.name,

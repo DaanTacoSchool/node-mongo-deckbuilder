@@ -8,9 +8,10 @@ before((done) => {
     .once('open',() => { done(); })
     .on('error',(error)=> {
         console.warn('warning',error);
-    });// console.log('good to go')
+    });
 });
 
+// do not execute this as this will drop production collections
 // beforeEach((done)=> {
 //     mongoose.connection.collections.de.drop( () => {
 //         //ready to run next test
